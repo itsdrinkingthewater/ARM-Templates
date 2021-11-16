@@ -1,57 +1,69 @@
 {
-  "mode": "Indexed",
-  "policyRule": {
-    "if": {
-      "allOf": [
-        {
-          "field": "name",
-          "notMatch": "[concat('vm', parameters('application'), '-', parameters('tier'), '-', parameters('environment'), '##')]"
-        },
-        {
-          "field": "type",
-          "equals": "Microsoft.Compute/virtualMachines"
-        }
-      ]
+  "properties": {
+    "displayName": "Deny Creation of VMs improperly named",
+    "policyType": "Custom",
+    "mode": "All",
+    "description": "This policy allows you to deny creation of VMs that are not named according to the naming standard.",
+    "metadata": {
+      "createdBy": "78adb76d-d95e-44cd-a461-b58c85558003",
+      "createdOn": "2021-04-09T01:26:34.6694828Z",
+      "updatedBy": null,
+      "updatedOn": null
     },
-    "then": {
-      "effect": "deny"
+    "parameters": {
+      "application": {
+        "type": "String",
+        "metadata": {
+          "description": "Use 1 - 6 characters for the application name or abbreviation",
+          "displayName": "Application Name or Abbreviation"
+        }
+      },
+      "environment": {
+        "type": "String",
+        "metadata": {
+          "description": "Use 1 character for the environment abbreviation: 'd' = Dev, 'p' = Production, 'q' = QA, & 't' = Test ",
+          "displayName": "Environment Abbreviation"
+        },
+        "allowedValues": [
+          "d",
+          "p",
+          "q",
+          "t"
+        ]
+      },
+      "tier": {
+        "type": "String",
+        "metadata": {
+          "description": "Use 2 - 3 characters to abbreviate the tier",
+          "displayName": "Tier Abbreviation"
+        },
+        "allowedValues": [
+          "db",
+          "app",
+          "web"
+        ],
+        "defaultValue": "app"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "name",
+            "notMatch": "[concat('vm', parameters('application'), '-', parameters('tier'), '-', parameters('environment'), '##')]"
+          },
+          {
+            "field": "type",
+            "equals": "Microsoft.Compute/virtualMachines"
+          }
+        ]
+      },
+      "then": {
+        "effect": "deny"
+      }
     }
   },
-  "parameters": {
-    "application": {
-      "type": "String",
-      "metadata": {
-        "displayName": "Application Name or Abbreviation",
-        "description": "Use 1 - 6 characters for the application name or abbreviation"
-      },
-      "defaultValue": "app"
-    },
-    "environment": {
-      "type": "String",
-      "metadata": {
-        "displayName": "Environment Abbreviation",
-        "description": "Use 1 character for the environment abbreviation: 'd' = Dev, 'p' = Production, 'q' = QA, & 't' = Test "
-      },
-      "allowedValues": [
-        "d",
-        "p",
-        "q",
-        "t"
-      ],
-      "defaultValue": "d"
-    },
-    "tier": {
-      "type": "String",
-      "metadata": {
-        "displayName": "Tier Abbreviation",
-        "description": "Use 2 - 3 characters to abbreviate the tier"
-      },
-      "allowedValues": [
-        "db",
-        "app",
-        "web"
-      ],
-      "defaultValue": "app"
-    }
-  }
+  "id": "/providers/Microsoft.Management/managementgroups/f572bb/providers/Microsoft.Authorization/policyDefinitions/Deny Creation of VMs improperly named",
+  "type": "Microsoft.Authorization/policyDefinitions",
+  "name": "Deny Creation of VMs improperly named"
 }
